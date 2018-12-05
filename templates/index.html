@@ -21,9 +21,50 @@
     <!-- Custom styles for this template -->
     <link href="/static/css/grayscale.min.css" rel="stylesheet">
 
+    <!-- croppie-->
+    <link rel="stylesheet" href="/static/css/croppie.css" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </head>
+
+<style>
+    label.cabinet{
+        display: block;
+        cursor: pointer;
+    }
+
+    label.cabinet input.file{
+        position: relative;
+        height: 100%;
+        width: auto;
+        opacity: 0;
+        -moz-opacity: 0;
+        filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        margin-top:-30px;
+    }
+
+    #upload-demo{
+        width: 250px;
+        height: 250px;
+        padding-bottom:25px;
+    }
+    figure figcaption {
+        position: absolute;
+        bottom: 0;
+        color: #fff;
+        width: 100%;
+        padding-left: 9px;
+        padding-bottom: 5px;
+        text-shadow: 0 0 10px #000;
+    }
+
+    .fit {
+      max-width: 35%;
+      max-height: 35%;
+    }
+
+</style>
 
 
 <body id="page-top">
@@ -31,7 +72,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#" onclick="switchtoHeader()">Style Transfer</a>
+        <a class="navbar-brand js-scroll-trigger" href="#" onclick="startOver()">Start Over</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -53,26 +94,56 @@
         </div>
     </div>
 </nav>
-
 <!-- Header -->
 <header id="header" class="masthead" style="display: block;">
     <div class="container d-flex h-100 align-items-center">
         <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase">Fast Style Transfer</h1>
-            <h2 class="text-white-50 mx-auto mt-2 mb-5">A multi-functional art style transfer solution trained by a convolutional neural network</h2>
-            <form id="image_form" method="post" enctype="multipart/form-data">
+            <h1 class="mx-auto my-0 text-uppercase">Style Transfer</h1>
+            <h2 class="text-white-50 mx-auto mt-2 mb-5">A Multi-functional Art Style Transfer Solution Trained By a Convolutional Neural Network</h2>
+            <form id="image_form" method="post" enctype="multipart/form-data" action="{{ url_for('index') }}">
                 <div>
-                    <label class="btn btn-primary mx-auto"> Choose Your Picture <input type='file' onchange="readURL(this);" id="imgInp" name="file" style="display: none;"></label>
+                    <label class="btn btn-primary mx-auto"> Choose Your Picture
+                        <input type='file' class="item-img" name="file_photo" style="display: none;">
+                    </label>
+                    <br>
+{#                    <textarea id="output" name="output_image" value="" style="display: none"/></textarea>#}
                 </div>
             </form>
-            <div id="image" style="display: none">
-                <br>
-                <img id="blah" src="#" alt="Uploaded Image">
+
+            <div class="inline-block" id="image_output" style="display: none">
+                <img src="" class="fit" id="item-img-origin" alt="display_image"/>
+{#                <canvas id="myCanvas2" class="fit" style="border:5px solid #d3d3d3;"></canvas>#}
             </div>
+
+            <div class="inline-block" id="image" style="display: none">
+                <img src="" class="fit" id="item-img-output" alt="display_image"/>
+{#                <canvas id="myCanvas1" class="fit" style="border:5px solid #d3d3d3;"></canvas>#}
+            </div>
+
             <div id="next" style="display: none;">
                 <br>
                 <br>
                 <button class="btn btn-primary mx-auto" onclick="switchtoAbout()">Next Step</button>
+            </div>
+
+            <div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Choose the Foreground</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div><small><b>Click "Close" If You Do Not Need Partial Style Transfer</b></small></div>
+                            <br>
+                            <div id="upload-demo" style="text-align: center"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="showPicture()">Close</button>
+                            <button type="button" id="cropImageBtn" class="btn btn-primary">Crop</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -83,7 +154,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <h2 class="text-white mb-4">Built with Bootstrap 4</h2>
+                <h2 class="text-white mb-4">Partial Style Transfer (Foreground/Background)</h2>
                 <p><button class="btn btn-primary mx-auto" onclick="switchtoProjects()">Next Step</button></p>
             </div>
         </div>
@@ -243,27 +314,24 @@
 <!-- Custom scripts for this template -->
 <script src="/static/js/grayscale.min.js"></script>
 
+<script src="/static/js/croppie.js"></script>
+
 </body>
 
 </html>
 
 <script>
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#blah')
-                    .attr('src', e.target.result)
-                    .width(150)
-                    .height(200);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-            document.getElementById("next").style.display = "inline";
-            document.getElementById("image").style.display = "inline";
-        }
-    }
+    $('#item-img-output').on('click', function () {
+        var c = document.getElementById("myCanvas1");
+        var ctx = c.getContext("2d");
+        var img = document.getElementById("item-img-output");
+        ctx.drawImage(img, 0, 0);
+        var c2 = document.getElementById("myCanvas2");
+        var ctx2 = c2.getContext("2d");
+        var img2 = document.getElementById("item-img-origin");
+        ctx2.drawImage(img2, 0, 0);
+    });
 
     function switchtoAbout() {
         document.getElementById('about').style.display = "block";
@@ -289,7 +357,8 @@
 
     }
 
-    function switchtoHeader() {
+    function startOver() {
+        location.reload();
         document.getElementById('about').style.display = "none";
         document.getElementById('projects').style.display = "none";
         document.getElementById('signup').style.display = "none";
@@ -297,4 +366,103 @@
 
     }
 
+    function showPicture() {
+        document.getElementById("image_output").style.display = "inline";
+        document.getElementById("next").style.display = "inline";
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(256)
+                    .height(256);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Start upload preview image
+    $(".gambar").attr("src");
+    var $uploadCrop,
+        tempFilename,
+        rawImg,
+        imageId;
+
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('.upload-demo').addClass('ready');
+                $('#cropImagePop').modal('show');
+                rawImg = e.target.result;
+                $('#item-img-origin')
+                    .attr('src', e.target.result)
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        else {
+            swal("Sorry - you're browser doesn't support the FileReader API");
+        }
+    }
+
+    $uploadCrop = $('#upload-demo').croppie({
+        viewport: {
+            width: 128,
+            height: 128,
+        },
+        enforceBoundary: false,
+        enableExif: true
+    });
+    $('#cropImagePop').on('shown.bs.modal', function(){
+        // alert('Shown pop');
+        $uploadCrop.croppie('bind', {
+            url: rawImg
+        }).then(function(){
+            console.log('jQuery bind complete');
+        });
+    });
+
+    $('.item-img').on('change', function () {
+        imageId = $(this).data('id');
+        tempFilename = $(this).val();
+        $('#cancelCropBtn').data('id', imageId);
+        readFile(this);
+    });
+
+    $('#cropImageBtn').on('click', function (ev) {
+        $uploadCrop.croppie('result', {
+            type: 'base64',
+            format: 'jpeg',
+            size: {width: 128, height: 128},
+        }).then(function (resp) {
+            $('#item-img-output').attr('src', resp);
+            {#document.getElementById('output').value = resp;#}
+            document.getElementById("image").style.display = "inline";
+            document.getElementById("next").style.display = "inline";
+            document.getElementById('image_output').style.display = "inline";
+            $('#cropImagePop').modal('hide');
+        });
+        var detail = $uploadCrop.croppie('get');
+        var points = detail.point;
+        console.log(JSON.stringify(detail.points));
+
+        $.ajax({
+            type: "POST",
+            url: "/",
+            contentType: "application/json charset=utf-8",
+            data: JSON.stringify(points),
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    
+    });
+    // End upload preview image
 </script>

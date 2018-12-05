@@ -17,7 +17,9 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        file = request.files['file']
+        file = request.files['file_photo']
+        coordinate = request.get_json()
+        print(coordinate)
         print(file)
     return render_template('index.html')
 
