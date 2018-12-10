@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Style Transfer</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/grayscale.css" rel="stylesheet">
+
+    <link href="/static/css/image-picker.css" rel="stylesheet">
+
+    <!-- croppie-->
+    <link rel="stylesheet" href="/static/css/croppie.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+
+<style>
+    label.cabinet{
+        display: block;
+        cursor: pointer;
+    }
+
+    label.cabinet input.file{
+        position: relative;
+        height: 100%;
+        width: auto;
+        opacity: 0;
+        -moz-opacity: 0;
+        filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        margin-top:-30px;
+    }
+
+    #upload-demo{
+        width: 250px;
+        height: 250px;
+        padding-bottom:25px;
+    }
+    figure figcaption {
+        position: absolute;
+        bottom: 0;
+        color: #fff;
+        width: 100%;
+        padding-left: 9px;
+        padding-bottom: 5px;
+        text-shadow: 0 0 10px #000;
+    }
+
+    .fit {
+      max-width: 50%;
+      max-height: 50%;
+    }
+
+</style>
+
+
+<body id="page-top">
+
+<!-- Navigation -->
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="/">Style Transfer</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#header">Project</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#motivation">Motivation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#approach">Approach</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#implementation">Implementation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#results">Results</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header -->
+<header id="header" class="masthead" style="display: block;">
+    <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+            <h1 class="mx-auto my-0 text-uppercase">Style Transfer</h1>
+            <h2 class="text-white-50 mx-auto mt-2 mb-5">A Multi-functional Art Style Transfer Solution Trained By a Convolutional Neural Network</h2>
+            <a href="{{ result_name }}" download>
+                <img class="fit image_picker_image" src="{{ result_name }}" style="border:5px solid black">
+            </a>
+            <div>
+                <br>
+                <small class="btn btn-primary mx-auto"> Click the Picture to Download </small>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Projects Section -->
+<section id="projects" class="projects-section bg-light" style="display: none;">
+    <div class="container">
+        <h3 class="instructions">Click to select one or two styles:</h3>
+        <select name="style" class="image-picker show-html" data-limit="2" multiple="multiple" form="image_form">
+            <option data-img-src="/static/img/1.jpg" value="1">Style 1</option>
+            <option data-img-src="/static/img/2.jpg" value="2">Style 2</option>
+            <option data-img-src="/static/img/3.png" value="3">Style 3</option>
+        </select>
+        <div align="center" class="next-bt">
+            <button type="submit" class="btn btn-primary mx-auto" form="image_form">Submit</button>
+            <br>
+            <br>
+        </div>
+    </div>
+</section>
+
+<!-- Motivation Section -->
+<section id="motivation" class="info-section text-center style2">
+    <div class="container">
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-11 col-xl-11">
+                <div class="text-center text-lg-left">
+                    <h1 class ="text-white">Motivation.</h1>
+                    <br>
+                    <p class="text-white-50 mb-0 style2-font">Motivated by the skills in fine art that people transfer the contents perceived into paintings with artistic style, we implemented an algorithm that combines the style of a painting with the content of a photograph to create a new artistic image in this project. Based on the fact that human painting with certain style costs a large amount of time, we tried to find an optimized way in which the machine, instead of humans, “learns” the style. We want to fuse the learned artistic style with a random object picture in order to help save the observation time spent on learning styles for artists and give people who do not have the painting skill a chance to create their own art pieces. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Approach Section -->
+<section id="approach" class="info-section text-center style1">
+    <div class="container">
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-11 col-xl-11">
+                <div class="text-center text-lg-left">
+                    <h1>Approach.</h1>
+                    <br>
+                    <p class="text-black-50 mb-0">Our approach is based on the suggestions of Gatys (2015): to utilize a multi-layer neural network through optimizing the content loss and style loss of a noisy image referring to an artistic style picture and a photographic content picture.</p>
+                    <br>
+                    <p class="text-black-50 mb-0">The next step is to reduce the possible time consumed on optimizing the loss by keeping iterating inside the multilayer convoluted neural network. To do this, we refer to the idea of Ulyanov, Lebedev, Vedaldi, and Lempitsky (2015) that training a feed-forward neural network to realize the faster style-transfer. This network made use of plentiful content images to approach the idealistic style and content loss, thus, we can generate the target image faster with the training process already done.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Implementation Section -->
+<section id="implementation" class="info-section text-center style2">
+    <div class="container">
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-11 col-xl-11">
+                <div class="text-center text-lg-left">
+                    <h1 class ="text-white">Implementation.</h1>
+                    <br>
+                    <p class="text-white-50 mb-0 style2-font">The training and classifying structures in the implementation of process will be transitional as others since the build-up of CNN seems straightforward in hindsight, but we retuned the structure in light of the genres of styles we use, thus construct our models with different structure with changes in the order and repetition of implementation, modifying the numbers of layers of the style, step of iterations we go through to come out with a new solution to reproduce the picture with different visual effect of style transfer. </p>
+                    <br>
+                    <p class="text-white-50 mb-0 style2-font">Thus, the modification of our approach will mostly lie on the weight of original contents and share of styles. By doing this, we will define different loss functions to train the data for classification and more customized weight for the target visual effect. Higher layers in the convolutional neural network capture the more detailed content, but in the reconstruction, they do not constrain the pixel locations. To obtain the style and apply it appropriately throughout the whole content, we tried different filters to extract the spatial features and then combined the content and style. Considering the situation where sometimes layer optimized result does not necessarily match the appreciation in the biological evaluation, our approach customized the layers to produce a version that human beings feel most aesthetic beauty.</p>
+                    <br>
+                    <p class="text-white-50 mb-0 style2-font">To speed up the training process, we rent a computing virtual machine on Google Cloud whose GPU can support us to train one style with ten thousand content images within 8 hours. One possible approach to implement and improve fast transfer is to change the weight of style loss in the total loss function: </p>
+                    <br>
+                    <p class="text-white mb-0 style2-font"  align="middle"><b>Ltotal(p, a, x) = αLcontent(p, x) + βLstyle(a, x)</b></p>
+                    <br>
+                    <p class="text-white-50 mb-0 style2-font">Specifically, when we want to yield a strongly stylistic picture, we increase α/β and vice versa. </p>
+                    <br>
+                    <p class="text-white-50 mb-0 style2-font">
+                    We did experiments on existing solutions and based on the feed-forward methodology and the original implementation, we  first tried to improve those codes to get our desirable functions, then we worked on some improvement on practical functionalities: </p>
+                    <br>
+                     <p class="text-white-50 mb-0 style2-font">1.  fuse/transfer more than one style</p>
+                     <p class="text-white-50 mb-0 style2-font">We computed an idealistic style loss for each style then combine them by assigning weights for each style (in our practice is 1:1). Another possible approach we thought of is to do the style transfer training multiple times using the style images as inputs to train one combined style image, then use this combined style image and the content image as inputs of the feed-forward neural network to compute our desired styled image.</p>
+                     <br>
+                     <p class="text-white-50 mb-0 style2-font">2. realize the function of partial style transferring such as background style transfer</p>
+                     <p class="text-white-50 mb-0 style2-font">The first step we did is to accomplish background segregation for the user input image.  The target for transfer can be various, such as foreground style transfer, which means we only make style transfer for foreground picture but leave background picture as what it is. For faster transfer, we crop the user image image to roughly split the foreground and background before detailed separation.</p>
+                     <br>
+                     <p class="text-white-50 mb-0 style2-font">One possible solution we came up with is to segment the background from the image using existing segmentation and detection algorithms. Tentatively, we tried to use the K-means clustering method to segment different color regions, which worked pretty well for pictures whose foreground and background are highly color-contrasted. Moreover, we tried to segment foreground by calculating the local standard deviation of the image. It works well for pictures who have an outstanding focused region. As the edges of the focused region are sharper than the defocused region, we can filter the image by a threshold value for local standard deviation.</p>
+                     <br>
+                     <p class="text-white-50 mb-0 style2-font">(pics)</p>
+                     <br>
+                     <p class="text-white-50 mb-0 style2-font">By filtering the local standard deviation value, we can roughly get the boundary of the foreground part. Then, we apply only the foreground, or background part to style transfer then combine it back to the original image.</p>
+                     <br>
+                     <p class="text-white-50 mb-0 style2-font">We finalize our implementation by evaluation on all of the resulting pictures we get with different parameters. We evaluated the performance of our solution basically on its visual results and speed. For evaluation, we tested our network on transferring of different content and style images to check whether it could generate images with the details in the content image and features in the style image while producing results that human beings feel most aesthetic beauty. For the speed, we tested our method both on CPU and GPU with images of different resolution to check the time it needs to finish the task, and compared with the time needed for training on Google Cloud computing machine. We also compared our results with the results generated by some well-known mobile applications (e.g. Prisma, Artify and Picsart). </p>
+                     <br>
+                     <div>
+                     <p class="text-white-50 mb-0 style2-font">Check out our implementation on Github:&nbsp&nbsp
+                        <a href="https://github.com/overflocat/fast-neural-style-keras" target="_blank">
+                            <img class="img-fluid" src="../static/img/github-white.png" alt="github">
+                        </a>
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Results Section -->
+<section id="results" class="info-section text-center style1">
+    <div class="container">
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-11 col-xl-11">
+                <div class="text-center text-lg-left">
+                    <h1>Results.</h1>
+                    <br>
+                    <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it
+                        for any project - even commercial projects! Download it, customize it, and publish your
+                        website!Grayscale is open source and MIT licensed. This means you can use it
+                        for any project - even commercial projects! Download it, customize it, and publish your
+                        website!Grayscale is open source and MIT licensed. This means you can use it
+                        for any project - even commercial projects! Download it, customize it, and publish your
+                        website!Grayscale is open source and MIT licensed. This means you can use it
+                        for any project - even commercial projects! Download it, customize it, and publish your
+                        website!Grayscale is open source and MIT licensed. This means you can use it
+                        for any project - even commercial projects! Download it, customize it, and publish your
+                        website!Grayscale is open source and MIT licensed. This means you can use it
+                        for any project - even commercial projects! Download it, customize it, and publish your
+                        website!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-black small text-center text-white-50">
+          <div class="container github-bt">
+            <a href="https://github.com/overflocat/fast-neural-style-keras" target="_blank">
+                <img class="img-fluid" src="../static/img/github-white.png" alt="">
+            </a>
+          </div>
+    <div class="container">
+        A UW-Madison CS534 Project by Fei Gu, Wei Xie, Yufei Cheng, Yue Sun in Fall 2018.
+    </div>
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Scripts for the Image Picker -->
+<script src="/static/js/image-picker.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="/static/js/grayscale.js"></script>
+
+<script src="/static/js/croppie.js"></script>
+
+</body>
+
+</html>
