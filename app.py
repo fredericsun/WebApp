@@ -6,6 +6,8 @@ import numpy as np
 import cv2 as cv
 from tensorflow import Graph, Session
 import uuid
+import shutil
+import os
 
 
 class KerasModel(object):
@@ -78,7 +80,6 @@ def remove_padding(image, ori_height, ori_width):
 
 
 class FlaskApp(object):
-
     def __init__(self):
         self.eval_model_1 = KerasModel('./trained_nets/1.h5')
         self.eval_model_2 = KerasModel('./trained_nets/2.h5')
@@ -94,6 +95,8 @@ class FlaskApp(object):
         @self.app.route('/', methods=['GET', 'POST'])
         def index():
             if request.method == 'POST':
+                shutil.rmtree('./static/img/output/')
+                os.makedirs('./static/img/output/')
                 image = request.files['file_photo']
                 image = np.fromstring(image.read(), np.uint8)
                 image = cv.imdecode(image, cv.IMREAD_UNCHANGED)
@@ -114,8 +117,8 @@ class FlaskApp(object):
                     res = image_trans
 
                 rand_name = str(uuid.uuid4()).replace('-', '')[0:15]
-                imsave('./static/img/output_' + rand_name + '.jpg', res)
-                return render_template('results.html', result_name='./static/img/output_' + rand_name + '.jpg')
+                imsave('./static/img/output/output_' + rand_name + '.jpg', res)
+                return render_template('results.html', result_name='./static/img/output/output_' + rand_name + '.jpg')
             else:
                 return render_template('index.html')
 
@@ -126,4 +129,4 @@ class FlaskApp(object):
 if __name__ == '__main__':
     flask_app = FlaskApp()
     app = flask_app.get_app()
-    app.run(debug=True)
+    app.run(debug=False)
