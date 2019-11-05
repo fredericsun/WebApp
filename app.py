@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 from utils import process_image, deprocess_image
 from models import get_evaluate_model
-from scipy.misc import imsave
 import numpy as np
 import cv2 as cv
 from tensorflow import Graph, Session
@@ -117,7 +116,7 @@ class FlaskApp(object):
                     res = image_trans
 
                 rand_name = str(uuid.uuid4()).replace('-', '')[0:15]
-                imsave('./static/img/output/output_' + rand_name + '.jpg', res)
+                cv.imwrite('./static/img/output/output_' + rand_name + '.jpg', res)
                 return render_template('results.html', result_name='./static/img/output/output_' + rand_name + '.jpg')
             else:
                 return render_template('index.html')
